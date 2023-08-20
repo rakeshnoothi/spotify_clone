@@ -12,6 +12,7 @@ import Authorization from "../pages/Authorization";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import { requestAccessToken } from "../auth/auth";
+import localStorageMethod from "../utils/localStorageMethod";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -24,7 +25,10 @@ const router = createBrowserRouter(
                 element={<ProtectedRoute element={<Home />} />}
                 path="/"
                 loader={async () => {
-                    await requestAccessToken();
+                    const accessToken = localStorageMethod.getAccessToken();
+                    if (!accessToken) {
+                        await requestAccessToken();
+                    }
                     return null;
                 }}
             />

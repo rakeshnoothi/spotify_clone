@@ -1,25 +1,26 @@
 import axios from "axios";
 import localStorageMethod from "./localStorageMethod";
-import { logoutUser } from "../auth/auth";
+import { requestRefreshToken } from "../auth/auth";
 
 const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_SPOTIFY_BASE_URL,
+    baseURL: import.meta.env.VITE_SPOTIFY_TOKEN_URL,
     headers: {
         "Content-Type": "application/x-www-form-urlencoded",
     },
 });
 
-axiosInstance.interceptors.request.use(async (config) => {
-    const accessToken = localStorageMethod.getAccessToken();
-    const clientId = import.meta.env.VITE_CLIENT_ID;
-    const redirectUri = import.meta.env.VITE_REDIRECT_URL;
+axiosInstance.interceptors.request.use(
+    async (config) => {
+        const accessToken = localStorageMethod.getAccessToken();
+        const clientId = import.meta.env.VITE_CLIENT_ID;
+        const redirectUri = import.meta.env.VITE_REDIRECT_URL;
 
-    const urlParams = new URLSearchParams(window.location.search);
-    let code = urlParams.get("code");
-    let codeVerifier = localStorage.getItem("code_verifier");
+        const urlParams = new URLSearchParams(window.location.search);
+        let code = urlParams.get("code");
+        let codeVerifier = localStorage.getItem("code_verifier");
+        console.log(config);
 
-    if (config.url === "/api/token") {
-        if (!accessToken) {
+        if (config.url === "/api/token") {
             config.data = new URLSearchParams({
                 grant_type: "authorization_code",
                 code: code,
@@ -27,30 +28,36 @@ axiosInstance.interceptors.request.use(async (config) => {
                 client_id: clientId,
                 code_verifier: codeVerifier,
             });
+        } else {
+            config.baseURL = import.meta.env.VITE_SPOTIFY_BASE_URL;
+            config.headers.Authorization = `Bearer ${accessToken}`;
         }
-    } else {
-        config.headers["Authorization"] = `Bearer ${accessToken}`;
+        return config;
+    },
+    (error) => {
+        console.log(error);
+        if (!error.response) {
+            console.log("cannot make a request");
+        }
     }
-    return config;
-});
+);
 
 axiosInstance.interceptors.response.use(
     (response) => {
-        console.log(response);
         return response;
     },
     async (error) => {
-        console.log(error);
-        const refreshToken = localStorageMethod.getRefreshToken();
-        if (error.response.status === 401 && refreshToken) {
-            await axiosInstance.post("/api/token", {
-                grant_type: "refresh_token",
-                refresh_token: refreshToken,
-                clientId: import.meta.env.VITE_CLIENT_ID,
-            });
-        }
-        if (error.response.message === "The refresh token has expired.") {
-            logoutUser();
+        if (error.response.status === 401) {
+            //request for new access token
+            const response = await requestRefreshToken();
+            //if there is a access token
+            if (response.data.access_token) {
+                //make the previous request which got error because of unauthorization
+                const response = await axiosInstance
+                    .request(error.config.url)
+                    .then((res) => res);
+                return response;
+            }
         }
         return Promise.reject(error);
     }

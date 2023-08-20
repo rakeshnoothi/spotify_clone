@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosInstance from "../utils/axiosInstance";
 import localStorageMethod from "../utils/localStorageMethod";
 
@@ -70,8 +71,40 @@ export async function requestAccessToken() {
     }
 }
 
+export async function requestRefreshToken() {
+    const refreshToken = localStorageMethod.getRefreshToken();
+    let body = new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+        client_id: import.meta.env.VITE_CLIENT_ID,
+    });
+    if (refreshToken) {
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_SPOTIFY_TOKEN_URL}/api/token`,
+                body,
+                {
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                }
+            );
+            localStorageMethod.setAccessToken(response.data.access_token);
+            localStorageMethod.setRefreshToken(response.data.refresh_token);
+            localStorageMethod.setExpireTime(response.data.expires_in);
+            return response;
+        } catch (error) {
+            console.log(error);
+            logoutUser();
+        }
+    } else {
+        logoutUser();
+    }
+}
+
 export function logoutUser() {
     localStorage.clear();
+    document.location.reload();
 }
 // export const requestAccessToken = async () => {
 //     const clientId = import.meta.env.VITE_CLIENT_ID;
