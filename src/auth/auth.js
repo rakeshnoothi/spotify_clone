@@ -56,10 +56,7 @@ export async function requestAuthorization() {
 
 export async function requestAccessToken() {
     try {
-        const response = await axiosInstance.post("/api/token");
-        localStorageMethod.setAccessToken(response.data.access_token);
-        localStorageMethod.setRefreshToken(response.data.refresh_token);
-        localStorageMethod.setExpireTime(response.data.expires_in);
+        await axiosInstance.post("/api/token");
     } catch (error) {
         console.log(error);
         if (
@@ -71,35 +68,38 @@ export async function requestAccessToken() {
     }
 }
 
-export async function requestRefreshToken() {
+export async function requestRefreshToken(config) {
     const refreshToken = localStorageMethod.getRefreshToken();
-    let body = new URLSearchParams({
+    config.data = new URLSearchParams({
         grant_type: "refresh_token",
         refresh_token: refreshToken,
         client_id: import.meta.env.VITE_CLIENT_ID,
     });
-    if (refreshToken) {
-        try {
-            const response = await axios.post(
-                `${import.meta.env.VITE_SPOTIFY_TOKEN_URL}/api/token`,
-                body,
-                {
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                }
-            );
-            localStorageMethod.setAccessToken(response.data.access_token);
-            localStorageMethod.setRefreshToken(response.data.refresh_token);
-            localStorageMethod.setExpireTime(response.data.expires_in);
-            return response;
-        } catch (error) {
-            console.log(error);
-            logoutUser();
-        }
-    } else {
-        logoutUser();
-    }
+    config.url = "/api/token";
+    config.method = "post";
+    // if (refreshToken) {
+    //     try {
+    //         const response = await axios.post(
+    //             `${import.meta.env.VITE_SPOTIFY_TOKEN_URL}/api/token`,
+    //             body,
+    //             {
+    //                 headers: {
+    //                     "Content-Type": "application/x-www-form-urlencoded",
+    //                 },
+    //             }
+    //         );
+    //         localStorageMethod.setAccessToken(response.data.access_token);
+    //         localStorageMethod.setRefreshToken(response.data.refresh_token);
+    //         localStorageMethod.setExpireTime(response.data.expires_in);
+    //         return response;
+    //     } catch (error) {
+    //         console.log(error);
+    //         logoutUser();
+    //     }
+    // } else {
+    //     logoutUser();
+    // }
+    return config;
 }
 
 export function logoutUser() {

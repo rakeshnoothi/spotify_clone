@@ -18,7 +18,7 @@ const App = () => {
     loaderEl.classList.add("hide-loader");
 
     return (
-        <div>
+        <div className="h-full">
             <RenderComponent element={<Aside />} />
             <Outlet />
             <RenderComponent element={<Player />} />
