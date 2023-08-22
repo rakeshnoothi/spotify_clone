@@ -5,6 +5,7 @@ import localStorageMethod from "./utils/localStorageMethod";
 //component imports
 import Player from "./components/Player";
 import Aside from "./components/Aside";
+import UserDataContextProvider from "./context/UserDataContextProvider";
 
 //hook imports.
 
@@ -19,9 +20,11 @@ const App = () => {
 
     return (
         <div className="h-full">
-            <RenderComponent element={<Aside />} />
-            <Outlet />
-            <RenderComponent element={<Player />} />
+            <UserDataContextProvider>
+                <RenderComponent element={<Aside />} />
+                <Outlet />
+                <RenderComponent element={<Player />} />
+            </UserDataContextProvider>
         </div>
     );
 };

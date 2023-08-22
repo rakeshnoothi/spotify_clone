@@ -11,8 +11,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import Authorization from "../pages/Authorization";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
-import { requestAccessToken } from "../auth/auth";
 import localStorageMethod from "../utils/localStorageMethod";
+import axiosInstance from "../utils/axiosInstance";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -27,7 +27,19 @@ const router = createBrowserRouter(
                 loader={async () => {
                     const accessToken = localStorageMethod.getAccessToken();
                     if (!accessToken) {
-                        await requestAccessToken();
+                        try {
+                            const response = await axiosInstance.post(
+                                "/api/token"
+                            );
+                            localStorageMethod.setAccessToken(
+                                response.data.access_token
+                            );
+                            localStorageMethod.setRefreshToken(
+                                response.data.refresh_token
+                            );
+                        } catch (error) {
+                            console.log("error from router", error);
+                        }
                     }
                     return null;
                 }}

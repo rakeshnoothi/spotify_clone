@@ -1,7 +1,3 @@
-import axios from "axios";
-import axiosInstance from "../utils/axiosInstance";
-import localStorageMethod from "../utils/localStorageMethod";
-
 function generateRandomString(length) {
     let text = "";
     let possible =
@@ -37,7 +33,8 @@ export async function requestAuthorization() {
     const codeChallenge = await generateCodeChallenge(codeVerifier);
 
     let state = generateRandomString(16);
-    let scope = "user-read-private user-read-email";
+    let scope =
+        "user-read-private user-read-email playlist-read-private user-follow-read user-library-read user-read-recently-played";
 
     localStorage.setItem("code_verifier", codeVerifier);
 
@@ -54,139 +51,7 @@ export async function requestAuthorization() {
     window.location = "https://accounts.spotify.com/authorize?" + args;
 }
 
-export async function requestAccessToken() {
-    try {
-        await axiosInstance.post("/api/token");
-    } catch (error) {
-        console.log(error);
-        if (
-            error.response.data.error_description ===
-            "Invalid authorization code"
-        ) {
-            console.log("user denied authorization");
-        }
-    }
-}
-
-export async function requestRefreshToken(config) {
-    const refreshToken = localStorageMethod.getRefreshToken();
-    config.data = new URLSearchParams({
-        grant_type: "refresh_token",
-        refresh_token: refreshToken,
-        client_id: import.meta.env.VITE_CLIENT_ID,
-    });
-    config.url = "/api/token";
-    config.method = "post";
-    // if (refreshToken) {
-    //     try {
-    //         const response = await axios.post(
-    //             `${import.meta.env.VITE_SPOTIFY_TOKEN_URL}/api/token`,
-    //             body,
-    //             {
-    //                 headers: {
-    //                     "Content-Type": "application/x-www-form-urlencoded",
-    //                 },
-    //             }
-    //         );
-    //         localStorageMethod.setAccessToken(response.data.access_token);
-    //         localStorageMethod.setRefreshToken(response.data.refresh_token);
-    //         localStorageMethod.setExpireTime(response.data.expires_in);
-    //         return response;
-    //     } catch (error) {
-    //         console.log(error);
-    //         logoutUser();
-    //     }
-    // } else {
-    //     logoutUser();
-    // }
-    return config;
-}
-
 export function logoutUser() {
     localStorage.clear();
     document.location.reload();
 }
-// export const requestAccessToken = async () => {
-//     const clientId = import.meta.env.VITE_CLIENT_ID;
-//     const redirectUri = import.meta.env.VITE_REDIRECT_URL;
-
-//     const urlParams = new URLSearchParams(window.location.search);
-//     let code = urlParams.get("code");
-//     let codeVerifier = localStorage.getItem("code_verifier");
-
-//     let body = new URLSearchParams({
-//         grant_type: "authorization_code",
-//         code: code,
-//         redirect_uri: redirectUri,
-//         client_id: clientId,
-//         code_verifier: codeVerifier,
-//     });
-
-//     const hasAccessToken = localStorageMethod.getAccessToken();
-
-//     if (hasAccessToken !== null) return;
-
-//     try {
-//         const response = await axios
-//             .post(`${import.meta.env.VITE_SPOTIFY_BASE_URL}/api/token`, body, {
-//                 headers: {
-//                     "Content-Type": "application/x-www-form-urlencoded",
-//                 },
-//             })
-//             .then((res) => res.data);
-//         console.log(response);
-//         localStorageMethod.setAccessToken(response.access_token);
-//         localStorageMethod.setRefreshToken(response.refresh_token);
-//         localStorageMethod.setExpireTime(response.expires_in);
-//     } catch (error) {
-//         console.log(error);
-//         if (error.response) {
-//             console.log(
-//                 "response recieved from server but greater than 200",
-//                 error.response
-//             );
-//         }
-//         if (error.request) {
-//             console.log("request made but no response", error.request);
-//         }
-//         console.log(error.message);
-//         console.log(error.config);
-//     }
-// };
-
-// export async function refreshToken() {
-//     const refreshToken = localStorageMethod.getRefreshToken();
-
-//     let body = new URLSearchParams({
-//         grant_type: "refresh_token",
-//         refresh_token: refreshToken,
-//         clientId: import.meta.env.VITE_CLIENT_ID,
-//     });
-
-//     try {
-//         const response = await axios
-//             .post(`${import.meta.env.VITE_SPOTIFY_BASE_URL}/api/token`, body, {
-//                 headers: {
-//                     "Content-Type": "application/x-www-form-urlencoded",
-//                 },
-//             })
-//             .then((res) => res.data);
-//         console.log(response);
-//         localStorageMethod.setAccessToken(response.access_token);
-//         localStorageMethod.setRefreshToken(response.refresh_token);
-//         localStorageMethod.setExpireTime(response.expires_in);
-//     } catch (error) {
-//         console.log(error);
-//         if (error.response) {
-//             console.log(
-//                 "response recieved from server but greater than 200",
-//                 error.response
-//             );
-//         }
-//         if (error.request) {
-//             console.log("request made but no response", error.request);
-//         }
-//         console.log(error.message);
-//         console.log(error.config);
-//     }
-// }
