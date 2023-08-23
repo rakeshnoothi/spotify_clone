@@ -9,8 +9,9 @@ import ProtectedRoute from "./ProtectedRoute";
 
 //pages import.
 import Authorization from "../pages/Authorization";
-import Home from "../pages/Home";
-import Profile from "../pages/Profile";
+import Home from "../pages/home/Home";
+import Search from "../pages/search/search";
+import Library from "../pages/library/Library";
 import localStorageMethod from "../utils/localStorageMethod";
 import axiosInstance from "../utils/axiosInstance";
 
@@ -45,8 +46,12 @@ const router = createBrowserRouter(
                 }}
             />
             <Route
-                element={<ProtectedRoute element={<Profile />} />}
-                path="/profile"
+                element={<ProtectedRoute element={<Search />} />}
+                path="/search"
+            />
+            <Route
+                element={<ProtectedRoute element={<Library />} />}
+                path="/library"
             />
         </Route>
     )
