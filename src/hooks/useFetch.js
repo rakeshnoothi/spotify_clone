@@ -1,27 +1,34 @@
 import { useEffect, useState } from "react";
+import { useErrorBoundary } from "react-error-boundary";
 
-const useFetch = fetchDataFunction => {
+const useFetch = initialFunction => {
+    const { showBoundary } = useErrorBoundary();
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
 
-    useEffect(() => {
+    const fetchData = fetchFunction => {
         setIsLoading(true);
-        fetchDataFunction()
+        fetchFunction()
             .then(response => {
                 setData(response.data);
                 setIsLoading(false);
             })
             .catch(error => {
-                setError(error.message);
+                console.log("iam from hook error", error);
                 setIsLoading(false);
+                showBoundary(error.message);
             });
-    }, [fetchDataFunction]);
+    };
+
+    useEffect(() => {
+        fetchData(initialFunction);
+    }, []);
 
     return {
         data,
         isLoading,
-        error,
+        fetchData,
+        setData,
     };
 };
 export default useFetch;

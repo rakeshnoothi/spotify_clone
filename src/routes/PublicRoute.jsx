@@ -1,5 +1,9 @@
+import { Navigate } from "react-router-dom";
+import localStorageMethod from "../utils/localStorageMethod";
+
 const PublicRoute = ({ element }) => {
-    const auth = false;
-    if (!auth) return element;
+    const accessToken = localStorageMethod.getAccessToken();
+    if (!accessToken) return element;
+    return <Navigate to="/" />;
 };
 export default PublicRoute;

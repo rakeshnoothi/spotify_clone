@@ -61,12 +61,18 @@ axiosInstance.interceptors.response.use(
                     localStorageMethod.setAccessToken(
                         response.data.access_token
                     );
+                    localStorageMethod.setRefreshToken(
+                        response.data.refreshToken
+                    );
                     return axiosInstance(error.config);
                 } catch (error) {
                     console.log("error from refresh token update", error);
                     logoutUser();
                 }
             }
+        }
+        if (error.response.status >= 500) {
+            logoutUser();
         }
         return Promise.reject(error);
     }

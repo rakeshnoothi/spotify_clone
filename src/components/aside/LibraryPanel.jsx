@@ -5,12 +5,41 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import CategoryButton from "./CategoryButton";
 import FilteredAndSortedItems from "./FilteredAndSortedItems";
 import { useState } from "react";
+import useFetch from "../../hooks/useFetch";
+import fetchFunctions from "../../utils/api";
 
 const categoryDisplayNameArr = ["Playlist", "Artists", "Albums"];
 
 const LibraryPanel = () => {
     const [selectedCategory, setSelectedCategory] = useState("Playlist");
+    const { isLoading, data, fetchData, setData } = useFetch(
+        fetchFunctions.getCurrentUserPlaylist
+    );
+    //handle click from category buttons
+    const handleClick = displayName => {
+        if (displayName === selectedCategory) return;
+        switch (displayName) {
+            case "Artists": {
+                setSelectedCategory(displayName);
+                setData(null);
+                fetchData(fetchFunctions.getCurrentUserArtists);
+                break;
+            }
+            case "Albums": {
+                setSelectedCategory(displayName);
+                setData(null);
+                fetchData(fetchFunctions.getCurrentUserAlbums);
+                break;
+            }
+            default: {
+                setSelectedCategory(displayName);
+                setData(null);
+                fetchData(fetchFunctions.getCurrentUserPlaylist);
+            }
+        }
+    };
     console.log(selectedCategory);
+    console.log("userData", data);
 
     return (
         <div className="bg-base hidden rounded-lg grow p-2 space-y-6 lg:block overflow-hidden">
@@ -26,12 +55,12 @@ const LibraryPanel = () => {
                     <CategoryButton
                         displayName={categoryDisplayName}
                         key={categoryDisplayName}
-                        setSelectedCategory={setSelectedCategory}
+                        handleClick={handleClick}
                         selectedCategory={selectedCategory}
                     />
                 ))}
             </div>
-            <FilteredAndSortedItems />
+            <FilteredAndSortedItems data={data} isLoading={isLoading} />
         </div>
     );
 };
