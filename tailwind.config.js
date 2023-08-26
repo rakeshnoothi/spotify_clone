@@ -6,6 +6,7 @@ export default {
             primary: "#fff",
             secondary: "#b3b3b3",
             default: "#000000",
+            signature: "rgb(74, 222, 128)",
         },
         backgroundColor: {
             signature: "rgb(74, 222, 128)",

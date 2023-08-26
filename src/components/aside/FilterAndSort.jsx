@@ -2,7 +2,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
 const FilterAndSort = () => {
     return (
-        <div className="flex justify-between ">
+        <div className="flex space-x-2 ">
             <div className="bg-tinted-base flex space-x-2 p-2 hover:text-primary group">
                 <SearchOutlinedIcon className="text-secondary group-hover:text-primary group-hover:cursor-pointer" />
                 <input

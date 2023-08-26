@@ -1,8 +1,6 @@
+import Card from "../Card";
+import Section from "../Section";
 const Home = () => {
-    return (
-        <>
-            <div>home</div>
-        </>
-    );
+    return <>helo</>;
 };
 export default Home;

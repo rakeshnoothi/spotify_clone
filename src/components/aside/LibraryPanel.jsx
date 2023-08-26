@@ -12,7 +12,7 @@ const categoryDisplayNameArr = ["Playlist", "Artists", "Albums"];
 
 const LibraryPanel = () => {
     const [selectedCategory, setSelectedCategory] = useState("Playlist");
-    const { isLoading, data, fetchData, setData } = useFetch(
+    const { isLoading, data, fetchData } = useFetch(
         fetchFunctions.getCurrentUserPlaylist
     );
     //handle click from category buttons
@@ -21,19 +21,16 @@ const LibraryPanel = () => {
         switch (displayName) {
             case "Artists": {
                 setSelectedCategory(displayName);
-                setData(null);
                 fetchData(fetchFunctions.getCurrentUserArtists);
                 break;
             }
             case "Albums": {
                 setSelectedCategory(displayName);
-                setData(null);
                 fetchData(fetchFunctions.getCurrentUserAlbums);
                 break;
             }
             default: {
                 setSelectedCategory(displayName);
-                setData(null);
                 fetchData(fetchFunctions.getCurrentUserPlaylist);
             }
         }
@@ -42,7 +39,7 @@ const LibraryPanel = () => {
     console.log("userData", data);
 
     return (
-        <div className="bg-base hidden rounded-lg grow p-2 space-y-6 lg:block overflow-hidden">
+        <div className="bg-base hidden rounded-lg h-full p-2 space-y-6 lg:block overflow-hidden">
             <div className="flex justify-between">
                 <div className="space-x-4 text-secondary hover:text-primary  hover:cursor-pointer">
                     <CollectionsBookmarkOutlinedIcon />

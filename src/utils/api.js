@@ -19,12 +19,15 @@ const getCurrentUserPlaylist = () => makeRequest("/v1/me/playlists", "get");
 const getCurrentUserArtists = () =>
     makeRequest("/v1/me/following?type=artist", "get");
 const getCurrentUserAlbums = () => makeRequest("/v1/me/albums");
+const getCurrentUserRecentlyPlayed = () =>
+    makeRequest("/v1/me/player/recently-played");
 
 const fetchFunctions = {
     getCurrentUserProfile,
     getCurrentUserPlaylist,
     getCurrentUserArtists,
     getCurrentUserAlbums,
+    getCurrentUserRecentlyPlayed,
 };
 
 export default fetchFunctions;
