@@ -1,10 +1,10 @@
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
-const Card = () => {
+const Card = ({ data }) => {
     return (
-        <div className="w-48 h-64 relative p-4 bg-elevated-base hover:bg-elevated-highlight hover:cursor-pointer">
+        <div className="w-48 h-80 relative p-4 bg-elevated-base hover:bg-elevated-highlight hover:cursor-pointer">
             {/* <div className="absolute z-10 top-0 left-0 w-14 h-14 rounded-full bg-signature"></div> */}
-            <button className="absolute  z-50 top-1/2 right-6">
+            <button className="absolute  z-50 top-1/3 right-6">
                 <PlayArrowIcon
                     className=" text-default bg-signature rounded-full "
                     fontSize="large"
@@ -13,13 +13,17 @@ const Card = () => {
 
             <div className="  flex flex-col items-center space-y-4  ">
                 <img
-                    src="https://i.scdn.co/image/ab67656300005f1fa363151f85fb4f90b55d8180"
+                    src={data.image}
                     alt="Card image"
                     className="aspect-auto w-[166px] "
                 />
                 <div className="w-full">
-                    <div className="font-bold ">Card Title</div>
-                    <div className="">Card Owner</div>
+                    <div className="font-bold ">{data.name}</div>
+                    {data.description !== null ? (
+                        <div>{data.description}</div>
+                    ) : (
+                        <div>{data.ownerName}</div>
+                    )}
                 </div>
             </div>
         </div>

@@ -35,9 +35,6 @@ const LibraryPanel = () => {
             }
         }
     };
-    console.log(selectedCategory);
-    console.log("userData", data);
-
     return (
         <div className="bg-base hidden rounded-lg h-full p-2 space-y-6 lg:block overflow-hidden">
             <div className="flex justify-between">

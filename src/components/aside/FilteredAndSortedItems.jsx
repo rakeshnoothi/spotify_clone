@@ -2,6 +2,7 @@ import CategoryItem from "./CategoryItem";
 import FilterAndSort from "./FilterAndSort";
 
 const FilteredAndSortedItems = ({ data, isLoading }) => {
+    console.log("iam from filtersort", data);
     const returnFormattedData = data => {
         if (data === null) return <div>No data available</div>;
 
@@ -13,6 +14,7 @@ const FilteredAndSortedItems = ({ data, isLoading }) => {
                 id: item.id,
                 owner: null,
                 name: item.name,
+                type: item.type,
             }));
         } else if (data.items && data.items[0]?.album !== undefined) {
             itemsDataArr = data.items.map(item => ({
@@ -20,6 +22,7 @@ const FilteredAndSortedItems = ({ data, isLoading }) => {
                 id: item.album.id,
                 owner: item.album.artists[0]?.name,
                 name: item.album.name,
+                type: item.album.type,
             }));
         } else if (data.items) {
             itemsDataArr = data.items.map(item => ({
@@ -27,8 +30,10 @@ const FilteredAndSortedItems = ({ data, isLoading }) => {
                 id: item.id,
                 owner: item.owner?.display_name,
                 name: item.name,
+                type: item.type,
             }));
         }
+        console.log("iam from returnform", itemsDataArr);
 
         return itemsDataArr.length > 0 ? (
             itemsDataArr.map(itemData => (

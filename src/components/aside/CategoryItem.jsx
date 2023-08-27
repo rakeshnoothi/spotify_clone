@@ -1,6 +1,12 @@
+import { useNavigate } from "react-router-dom";
+
 const CategoryItem = ({ itemData }) => {
+    const navigate = useNavigate();
     return (
-        <div className="flex space-x-4 p-2 hover:bg-base-highlight hover:cursor-pointer">
+        <div
+            className="flex space-x-4 p-2 hover:bg-base-highlight hover:cursor-pointer"
+            onClick={() => navigate(`/${itemData.type}/${itemData.id}`)}
+        >
             <div className="aspect-square w-[48px] ">
                 <img
                     src={itemData.image}

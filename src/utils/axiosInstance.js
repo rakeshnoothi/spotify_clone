@@ -24,8 +24,6 @@ axiosInstance.interceptors.request.use(async config => {
     let code = urlParams.get("code");
     let codeVerifier = localStorage.getItem("code_verifier");
 
-    console.log(config);
-
     if (config.url === "/api/token" && !accessToken) {
         config.data = new URLSearchParams({
             grant_type: "authorization_code",
@@ -36,7 +34,6 @@ axiosInstance.interceptors.request.use(async config => {
         });
         return config;
     }
-
     //We have the access token but it is expired then make a reqwuest for refrsh token
     if (config.url === "/api/token" && refreshToken) {
         config.data = new URLSearchParams({
@@ -46,8 +43,6 @@ axiosInstance.interceptors.request.use(async config => {
         });
         return config;
     }
-    console.log("i ran from resoursce ");
-
     //if neither from above then that means we are logged in and making a request to the accessed spotify data
     config.baseURL = import.meta.env.VITE_SPOTIFY_BASE_URL;
     config.headers.Authorization = `Bearer ${accessToken}`;
@@ -58,12 +53,11 @@ axiosInstance.interceptors.request.use(async config => {
 axiosInstance.interceptors.response.use(
     response => {
         // if the response status is in 200s
-        console.log("iam from interceptor ok response", response);
         return response;
     },
     async error => {
         //if the response is above 200s level
-        console.log("error from interceptore", error);
+
         //if 401 then we are unauthariezed, and before redirecting the user to authorization page
         //check if the error is caused by refresh token expiration.
         if (error.response.status === 401) {
@@ -71,19 +65,22 @@ axiosInstance.interceptors.response.use(
             if (refreshToken) {
                 try {
                     const response = await axiosInstance.post("/api/token");
+                    console.log("i am from refresh token response", response);
                     localStorageMethod.setAccessToken(
                         response.data.access_token
+                    );
+                    localStorageMethod.setRefreshToken(
+                        response.data.refresh_token
                     );
                     //If response has new access token make the previous request that threw error.
                     return axiosInstance(error.config);
                 } catch (error) {
                     //if the status is error again the refresh token is expired or some other issue
-                    console.log("error from refresh token update", error);
                     logoutUser();
                 }
             }
         }
-        //if the error is not 401 but above logout the user
+        // if the error is not 401 but above logout the user
         if (error.response.status >= 500) {
             logoutUser();
         }

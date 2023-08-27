@@ -10,6 +10,7 @@ const useFetch = initialFunction => {
         setIsLoading(true);
         fetchFunction()
             .then(response => {
+                console.log("from fetch hook", response);
                 setData(response.data);
                 setIsLoading(false);
             })
@@ -21,7 +22,9 @@ const useFetch = initialFunction => {
     };
 
     useEffect(() => {
-        fetchData(initialFunction);
+        if (initialFunction) {
+            fetchData(initialFunction);
+        }
     }, []);
 
     return {

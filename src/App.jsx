@@ -28,7 +28,7 @@ const App = () => {
                 <UserDataContextProvider>
                     <RenderComponent element={<Aside />} />
                     <div className="h-full px-1 py-2 lg:grow ">
-                        <main className="bg-base h-full rounded-lg overflow-y-scroll px-6">
+                        <main className="bg-base h-full rounded-lg overflow-y-scroll px-6 flex">
                             <Outlet />
                         </main>
                     </div>
