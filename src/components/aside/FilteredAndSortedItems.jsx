@@ -1,8 +1,9 @@
+import { useState } from "react";
 import CategoryItem from "./CategoryItem";
 import FilterAndSort from "./FilterAndSort";
 
 const FilteredAndSortedItems = ({ data, isLoading }) => {
-    console.log("iam from filtersort", data);
+    const [inputValue, setInputValue] = useState("");
     const returnFormattedData = data => {
         if (data === null) return <div>No data available</div>;
 
@@ -33,12 +34,37 @@ const FilteredAndSortedItems = ({ data, isLoading }) => {
                 type: item.type,
             }));
         }
-        console.log("iam from returnform", itemsDataArr);
 
+        // return itemsDataArr.length > 0 ? (
+        //     itemsDataArr.map(itemData => (
+        //         <CategoryItem itemData={itemData} key={itemData.id} />
+        //     ))
+        // ) : (
+        //     <div>No data available</div>
+        // );
         return itemsDataArr.length > 0 ? (
-            itemsDataArr.map(itemData => (
-                <CategoryItem itemData={itemData} key={itemData.id} />
-            ))
+            itemsDataArr.map(itemData => {
+                //return items that are only matched with the value of variable inputValue coming from the filterAndSort component.
+                if (
+                    //transform itemData.name and inputvalue to upperCase or lower case and split when there are white spaces
+                    //and join them again without white spaces to make it case insensitive and white space insensitive.
+                    itemData.name
+                        .toUpperCase()
+                        .split(" ")
+                        .join("")
+                        .includes(inputValue.toUpperCase().split(" ").join(""))
+                )
+                    return (
+                        <CategoryItem itemData={itemData} key={itemData.id} />
+                    );
+
+                //if it is empty string return all the category items in the itemsDataArr..
+                if (inputValue === "") {
+                    return (
+                        <CategoryItem itemData={itemData} key={itemData.id} />
+                    );
+                }
+            })
         ) : (
             <div>No data available</div>
         );
@@ -46,7 +72,10 @@ const FilteredAndSortedItems = ({ data, isLoading }) => {
 
     return (
         <div className="h-full space-y-6 overflow-scroll">
-            <FilterAndSort />
+            <FilterAndSort
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+            />
             {isLoading ? <div>Loading....</div> : returnFormattedData(data)}
         </div>
     );

@@ -56,7 +56,7 @@ const router = createBrowserRouter(
             />
             <Route
                 element={<ProtectedRoute element={<Main />} />}
-                path="/:categoryTYpe/:itemId"
+                path="/:categoryType/:itemId"
             />
         </Route>
     )

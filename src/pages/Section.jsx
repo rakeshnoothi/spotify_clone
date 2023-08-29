@@ -18,7 +18,6 @@ const Section = ({ data, isLoading }) => {
                 };
                 return formattedData;
             });
-            console.log("playlists data", playlistsData);
 
             return playlistsData.map(item => (
                 <Card data={item} key={item.id} />

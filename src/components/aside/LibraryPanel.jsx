@@ -12,26 +12,30 @@ const categoryDisplayNameArr = ["Playlist", "Artists", "Albums"];
 
 const LibraryPanel = () => {
     const [selectedCategory, setSelectedCategory] = useState("Playlist");
-    const { isLoading, data, fetchData } = useFetch(
-        fetchFunctions.getCurrentUserPlaylist
-    );
+    const { isLoading, data, fetchData } = useFetch([
+        fetchFunctions.getCurrentUserPlaylist,
+    ]);
+
+    //data is an array of responses from fetch requests made.
+    const [asidePanelData] = data;
+
     //handle click from category buttons
     const handleClick = displayName => {
         if (displayName === selectedCategory) return;
         switch (displayName) {
             case "Artists": {
                 setSelectedCategory(displayName);
-                fetchData(fetchFunctions.getCurrentUserArtists);
+                fetchData([fetchFunctions.getCurrentUserArtists]);
                 break;
             }
             case "Albums": {
                 setSelectedCategory(displayName);
-                fetchData(fetchFunctions.getCurrentUserAlbums);
+                fetchData([fetchFunctions.getCurrentUserAlbums]);
                 break;
             }
             default: {
                 setSelectedCategory(displayName);
-                fetchData(fetchFunctions.getCurrentUserPlaylist);
+                fetchData([fetchFunctions.getCurrentUserPlaylist]);
             }
         }
     };
@@ -54,7 +58,10 @@ const LibraryPanel = () => {
                     />
                 ))}
             </div>
-            <FilteredAndSortedItems data={data} isLoading={isLoading} />
+            <FilteredAndSortedItems
+                data={asidePanelData}
+                isLoading={isLoading}
+            />
         </div>
     );
 };

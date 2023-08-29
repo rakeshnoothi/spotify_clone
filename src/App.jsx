@@ -17,8 +17,6 @@ const RenderComponent = ({ element }) => {
 };
 
 const App = () => {
-    console.log("i rendered from app");
-
     return (
         <ErrorBoundary
             FallbackComponent={Fallback}
@@ -28,7 +26,7 @@ const App = () => {
                 <UserDataContextProvider>
                     <RenderComponent element={<Aside />} />
                     <div className="h-full px-1 py-2 lg:grow ">
-                        <main className="bg-base h-full rounded-lg overflow-y-scroll px-6 flex">
+                        <main className="bg-base h-full rounded-lg overflow-y-scroll px-6 flex justify-center">
                             <Outlet />
                         </main>
                     </div>
