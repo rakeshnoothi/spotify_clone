@@ -12,7 +12,7 @@ const categoryDisplayNameArr = ["Playlist", "Artists", "Albums"];
 
 const LibraryPanel = () => {
     const [selectedCategory, setSelectedCategory] = useState("Playlist");
-    const { isLoading, data, fetchData } = useFetch([
+    const { isLoading, data, fetchOnClick } = useFetch([
         fetchFunctions.getCurrentUserPlaylist,
     ]);
 
@@ -25,17 +25,17 @@ const LibraryPanel = () => {
         switch (displayName) {
             case "Artists": {
                 setSelectedCategory(displayName);
-                fetchData([fetchFunctions.getCurrentUserArtists]);
+                fetchOnClick([fetchFunctions.getCurrentUserArtists]);
                 break;
             }
             case "Albums": {
                 setSelectedCategory(displayName);
-                fetchData([fetchFunctions.getCurrentUserAlbums]);
+                fetchOnClick([fetchFunctions.getCurrentUserAlbums]);
                 break;
             }
             default: {
                 setSelectedCategory(displayName);
-                fetchData([fetchFunctions.getCurrentUserPlaylist]);
+                fetchOnClick([fetchFunctions.getCurrentUserPlaylist]);
             }
         }
     };

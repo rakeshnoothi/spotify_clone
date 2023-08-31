@@ -2,7 +2,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
 const Card = ({ data }) => {
     return (
-        <div className="w-48 h-80 relative p-4 bg-elevated-base hover:bg-elevated-highlight hover:cursor-pointer">
+        <div className="w-full max-w-[300px] h-82 relative p-4 bg-elevated-base lg:max-w-[12rem] hover:bg-elevated-highlight hover:cursor-pointer">
             {/* <div className="absolute z-10 top-0 left-0 w-14 h-14 rounded-full bg-signature"></div> */}
             <button className="absolute  z-50 top-1/3 right-6">
                 <PlayArrowIcon

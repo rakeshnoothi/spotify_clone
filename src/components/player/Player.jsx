@@ -1,4 +1,4 @@
 const Player = () => {
-    return <div className="absolute w-full">Player</div>;
+    return <div className="text-primary lg:h-[10%]">Player</div>;
 };
 export default Player;

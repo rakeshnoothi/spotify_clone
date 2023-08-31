@@ -1,4 +1,4 @@
-import Card from "../pages/Card";
+import Card from "./Card";
 
 const Section = ({ data, isLoading }) => {
     const returnSectionCards = () => {
@@ -28,9 +28,9 @@ const Section = ({ data, isLoading }) => {
 
     if (isLoading) return <div>Loading.....</div>;
     return (
-        <div className="flex flex-col space-y-6 w-full">
-            <h1 className="text-2xl font-bold">Recently Played</h1>
-            <div className="flex flex-wrap w-full gap-3">
+        <div className="flex flex-col space-y-4 w-full">
+            <h1 className="text-2xl font-bold">Feautred</h1>
+            <div className="flex flex-wrap w-full gap-3 justify-center">
                 {returnSectionCards()}
             </div>
         </div>

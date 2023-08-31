@@ -14,7 +14,7 @@ import Search from "../pages/search/search";
 import Library from "../pages/library/Library";
 import localStorageMethod from "../utils/localStorageMethod";
 import axiosInstance from "../utils/axiosInstance";
-import Main from "../pages/main/Main";
+import TrackList from "../pages/track_list/TrackList";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -55,7 +55,7 @@ const router = createBrowserRouter(
                 path="/library"
             />
             <Route
-                element={<ProtectedRoute element={<Main />} />}
+                element={<ProtectedRoute element={<TrackList />} />}
                 path="/:categoryType/:itemId"
             />
         </Route>

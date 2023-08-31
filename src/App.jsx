@@ -22,18 +22,17 @@ const App = () => {
             FallbackComponent={Fallback}
             onReset={() => document.location.reload()}
         >
-            <div className="h-full text-primary bg-default flex flex-col-reverse lg:flex-row">
-                <UserDataContextProvider>
-                    <RenderComponent element={<Aside />} />
-                    <div className="h-full px-1 py-2 lg:grow ">
-                        <main className="bg-base h-full rounded-lg overflow-y-scroll px-6 flex justify-center">
+            <UserDataContextProvider>
+                <div className="h-full bg-default">
+                    <div className="h-[90%] text-primary bg-default flex flex-col-reverse lg:flex-row lg:grow">
+                        <RenderComponent element={<Aside />} />
+                        <div className="h-full px-6 py-2 lg:grow bg-base overflow-auto">
                             <Outlet />
-                        </main>
+                        </div>
                     </div>
-
-                    {/* <RenderComponent element={<Player />} /> */}
-                </UserDataContextProvider>
-            </div>
+                    <RenderComponent element={<Player />} />
+                </div>
+            </UserDataContextProvider>
         </ErrorBoundary>
     );
 };

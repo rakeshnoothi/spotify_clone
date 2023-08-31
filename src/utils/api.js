@@ -20,6 +20,9 @@ const getCurrentUserFeatured = () =>
     makeRequest("/v1/browse/featured-playlists?country=IN&limit=10");
 const getCurrentUserRecentlyPlayed = () =>
     makeRequest("/v1/me/player/recently-played?limit=10");
+const getTrack = id => {
+    makeRequest(`https://api.spotify.com/v1/tracks/${id}?market=IN`);
+};
 
 const fetchFunctions = {
     getCurrentUserProfile,
@@ -28,6 +31,7 @@ const fetchFunctions = {
     getCurrentUserAlbums,
     getCurrentUserFeatured,
     getCurrentUserRecentlyPlayed,
+    getTrack,
 };
 
 export default fetchFunctions;

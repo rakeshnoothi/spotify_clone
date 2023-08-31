@@ -7,20 +7,12 @@ const useFetch = initialFunction => {
     const [isLoading, setIsLoading] = useState(false);
 
     //takes in array of requests.
-    const fetchData = fetchfunctionsArr => {
+    const fetchOnClick = fetchFunctionsArr => {
+        const callFunctions = fetchFunctionsArr.map(fetchFunction =>
+            fetchFunction()
+        );
         setIsLoading(true);
-        // fetchFunction()
-        //     .then(response => {
-        //         console.log("from fetch hook", response);
-        //         setData(response.data);
-        //         setIsLoading(false);
-        //     })
-        //     .catch(error => {
-        //         console.log("iam from hook error", error);
-        //         setIsLoading(false);
-        //         showBoundary(error.message);
-        //     });
-        Promise.all(fetchfunctionsArr.map(fetchFunction => fetchFunction()))
+        Promise.all(callFunctions)
             .then(responseArr => {
                 const dataArr = responseArr.map(response => response.data);
                 setData(dataArr);
@@ -35,14 +27,14 @@ const useFetch = initialFunction => {
 
     useEffect(() => {
         if (initialFunction) {
-            fetchData(initialFunction);
+            fetchOnClick(initialFunction);
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return {
         data,
         isLoading,
-        fetchData,
+        fetchOnClick,
         setData,
     };
 };
